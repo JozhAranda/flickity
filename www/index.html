@@ -4,8 +4,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">    
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="assets/css/snackbar.min.css" />
-    <link rel="stylesheet" href="assets/css/wrap.css" />
+    <link href="assets/css/snackbar.min.css" rel="stylesheet" />
+    <link href="assets/css/flickity.min.css" rel="stylesheet" media="screen" />
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -14,104 +15,55 @@
     <![endif]-->
     <style>
       body {
-        background: #eee url('assets/img/bg.jpg') no-repeat bottom right fixed;
-        background-position-y: 20px;
+        background: #F5F5F5;
       }
       .snackbar {
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.7);
         padding: 7px;
         color: #fff;
-      }
-      .headerLogo {
-        margin: 0 auto;
-        margin-top: 15%;
-        zoom: 1.1;
-      }
-      @media only screen and (max-width: 769px) {
-        .headerLogo {
-          margin-top: 40%;
-        }
-      }
+      } 
     </style>
   </head>
 
-  <body onload="init()">
+  <body>
 
-    <div id="launcherPage" data-role="page"></div>
-
-    <div id="loginPage" data-role="page" class="container loginPage">
-
-      <div class="row" style="margin-left: 0;margin-right: 0;">
-        <div class="">
-          <img src="assets/img/sspm.png" class="img img-responsive headerLogo" alt="logo" />
-        </div>
-        <div class="col-md-12">
-            <div class="wrap">
-                <form class="login">
-                  <input type="text" name="username" id="username" class="form-control" placeholder="Introduzca su nombre de usuario" />
-                  <input type="password" name="password" id="password" class="form-control" placeholder="Introduzca su contraseña" />
-                  <input type="submit" class="btn btn-sm btn-primary" value="Iniciar sesión" id="submitButton"/>
-                </form>
-            </div>
+    <div class="row" style="margin-left: 0;margin-right: 0;">
+      <div class="text-center" style="margin: 25px 0 30px 0;">
+        <img src="assets/img/sspm_logo.png" width="120" class="img" />
+      </div>
+      <div class="main-gallery gallery js-flickity" data-flickity-options='{ "freeScroll": true, "contain": true, "prevNextButtons": false, "pageDots": false }'>
+        <div class="gallery-cell">
+          <img src="" width="512">
         </div>
       </div>
-
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="assets/js/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/flickity.min.js"></script>
     <script src="assets/js/snackbar.min.js"></script>
     <script type="text/javascript">
-      $(function() {
-        $('#submitButton').on('click touch', function(event) {
-        
-          event.preventDefault();       
-          
-          var username  = $('#username').val();
-          var password  = $('#password').val();
-
-          $.ajax({
-            method: 'POST',
-            url: 'http://joshuaranda.website/sspm/actasBackend/session.php',
-            //url: window.location.origin + '/actasBackend/session.php',
-            async: true,
-            crossDomain: true,
-            data: {
-              username: username,
-              password: password
-            },
-            cache: false,
-            beforeSend: function(){ $("#submitButton").val('Iniciando...'); },
-            success: function(data) {           
-              if(data) {
-
-                $("body").load("home.html").hide().fadeIn(1500).delay(6000);
-                window.location.href = "home.html";
-              
-              } else {
-
-                $("#submitButton").val('Iniciar sesión');
-                $.snackbar({
-                  content: "Invalido usuario y/o contraseña.", 
-                  timeout: 5000
-                }); 
-              }  
-            },
-            error: function(jqXHR, textStatus, errorThrown ) {   
-              $("#submitButton").val('Iniciar sesión');       
-              $.snackbar({
-                content: "Ocurrio un error, no desistas e intentalo nuevamente", 
-                timeout: 5000
-              });           
-            }
-          });
-
-          return false; 
-        });
+      var fileExt = {};
+      fileExt[0]=".png";
+      fileExt[1]=".jpg";
+      $.ajax({
+        url: 'http://joshuaranda.com/assets/img/',
+        async: true,
+        crossDomain: true,
+        type: 'GET',
+        dataType: 'jsonp',
+        cache: false,
+        success: function (data) {
+           $("#main-gallery").html('<div>');
+           $(data).find('a:contains(" + fileExt[0] + "),a:contains(" + fileExt[1] + ")').each(function () {
+               var filename = this.href.replace(window.location.host, "").replace("http:///", "");
+               $("#main-gallery").append('<div class="gallery-cell"><img src="'+filename+'"/></div>');
+           });
+           $("#main-gallery").append('</div>');
+         }     
       });
     </script>
-
   </body>
 </html>
