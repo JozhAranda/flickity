@@ -6,10 +6,10 @@
         id        = "com.phonegap.helloworld"
         version   = "1.0.0">
 
-    <name>Sistema de Actas</name>
+    <name>Sistema de Imagenes - Inteligencia</name>
 
     <description>
-        Sistema de Actas
+        Sistema de Imagenes - Inteligencia
     </description>
 
     <author href="http://phonegap.com" email="support@phonegap.com">
